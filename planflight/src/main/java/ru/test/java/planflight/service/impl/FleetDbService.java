@@ -29,6 +29,7 @@ public class FleetDbService implements FleetService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Fleet findByNames(String name) {
         return fleetRepo.findByName(name)
                 .orElseThrow(() -> new NotFoundException("Fleets with name %s not found", name));
