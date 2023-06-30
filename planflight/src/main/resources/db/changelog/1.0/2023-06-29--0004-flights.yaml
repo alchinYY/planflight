@@ -1,0 +1,40 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2023-06-29--0004-flights
+      author: yuriy
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: flightsPK
+                  name: id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: number
+                  type: VARCHAR(50)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: departure_airport
+                  type: VARCHAR(50)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: arrival_airport
+                  type: VARCHAR(50)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: departure_time
+                  type: timestamp
+              - column:
+                  constraints:
+                    nullable: false
+                  name: arrival_time
+                  type: timestamp
+            tableName: flights

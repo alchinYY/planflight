@@ -1,0 +1,99 @@
+plugins {
+    id 'java'
+    id 'com.github.johnrengelman.shadow'
+    id("org.liquibase.gradle") version "2.1.1"
+}
+
+
+sourceCompatibility = JavaVersion.VERSION_11
+targetCompatibility = JavaVersion.VERSION_11
+
+
+dependencies {
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+    testCompileOnly 'org.projectlombok:lombok'
+    testAnnotationProcessor 'org.projectlombok:lombok'
+
+    implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springdoc:springdoc-openapi-ui'
+
+    implementation 'org.liquibase:liquibase-core'
+    implementation 'org.postgresql:postgresql'
+
+    implementation 'org.modelmapper:modelmapper'
+    implementation 'org.reflections:reflections'
+
+    testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("org.junit.jupiter:junit-jupiter-engine")
+    testImplementation("org.junit.jupiter:junit-jupiter-params")
+    testImplementation("org.assertj:assertj-core")
+    testImplementation("org.mockito:mockito-junit-jupiter")
+
+    liquibaseRuntime 'org.liquibase:liquibase-core:3.8.9'
+    liquibaseRuntime("ch.qos.logback:logback-core")
+    liquibaseRuntime("ch.qos.logback:logback-classic:1.2.3")
+
+    liquibaseRuntime 'org.postgresql:postgresql'
+
+    liquibaseRuntime 'org.liquibase.ext:liquibase-hibernate5:3.6'
+    liquibaseRuntime 'org.springframework.data:spring-data-jpa'
+    liquibaseRuntime 'org.springframework.boot:spring-boot'
+    liquibaseRuntime sourceSets.main.output
+//для записи в yaml
+    liquibaseRuntime 'org.yaml:snakeyaml:1.26'
+}
+import com.github.jengelman.gradle.plugins.shadow.transformers.PropertiesFileTransformer
+shadowJar {
+    mergeServiceFiles()
+    append 'META-INF/spring.handlers'
+    append 'META-INF/spring.schemas'
+    append 'META-INF/spring.tooling'
+    transform(PropertiesFileTransformer) {
+        paths = ['META-INF/spring.factories' ]
+        mergeStrategy = "append"
+    }
+
+    archiveBaseName.set('planflight')
+    archiveClassifier.set('')
+    jar {
+        manifest {
+            attributes 'Main-Class': 'ru.test.java.planflight.Application'
+        }
+    }
+}
+
+tasks.build.dependsOn tasks.shadowJar
+
+
+test {
+    useJUnitPlatform()
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
+}
+
+
+ext {
+    database = new Properties().with {
+        load(file("db.properties").newReader()) //название файла с данными для бд
+        it
+    }
+}
+
+liquibase {
+    activities {
+        main {
+            classpath "$rootDir"
+            changeLogFile "src/main/resources/db/changelog/db.diff.yaml"
+            //используем переменные, а не сами значения
+            url database.getProperty("dbUrl")
+            username database.getProperty("dbUsername")
+            password database.getProperty("dbPassword")
+            referenceUrl 'hibernate:spring:entity?dialect=org.hibernate.dialect.PostgreSQL10Dialect&hibernate.physical_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy&hibernate.implicit_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy'
+        }
+        runList = "main"
+    }
+}

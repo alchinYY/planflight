@@ -1,0 +1,35 @@
+spring:
+  servlet:
+    multipart:
+      max-file-size: 50MB
+  main.allow-bean-definition-overriding: true
+  output.ansi.enabled: ALWAYS
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/plan_flight
+    username: test
+    password: test
+  jpa:
+#    hibernate.ddl-auto: none
+    hibernate.ddl-auto: none
+    properties:
+      hibernate:
+        event:
+          merge:
+            entity_copy_observer: allow
+        jdbc.time_zone: UTC
+    show-sql: true
+  liquibase:
+    drop-first: false
+
+server:
+  error:
+    includeException: true
+    include-message: always
+  forward-headers-strategy: framework
+
+  port: 8080
+
+time-zone: Europe/Moscow
+tmp:
+  dir: /tmp/parser/

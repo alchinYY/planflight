@@ -1,0 +1,49 @@
+plugins {
+    id "io.spring.dependency-management" version "1.1.0"
+    id 'com.github.johnrengelman.shadow' version '7.1.2' apply false
+}
+
+allprojects {
+    group "ru.test.java"
+
+    apply plugin: "io.spring.dependency-management"
+    dependencyManagement {
+        dependencies {
+            imports {
+                mavenBom "org.springframework.boot:spring-boot-dependencies:2.6.2"
+            }
+            dependency "org.modelmapper:modelmapper:${Versions.modelmapper}"
+            dependency "org.springdoc:springdoc-openapi-ui:${Versions.springDocOpenapiUi}"
+            dependency "org.hibernate.validator:hibernate-validator:${Versions.hibernateValidator}"
+            dependency "org.reflections:reflections:${Versions.reflections}"
+            dependency "org.postgresql:postgresql:${Versions.postgresql}"
+        }
+    }
+    configurations.all {
+        resolutionStrategy {
+            failOnVersionConflict()
+        }
+        resolutionStrategy {
+            force("javax.servlet:servlet-api:2.4")
+        }
+    }
+
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
+}
+
+
+task managedVersions {
+    doLast {
+        dependencyManagement.managedVersions.each {
+            println it
+        }
+    }
+}
+
+//gradle -q hello
+task hello {
+    println 'Hello world!'
+}

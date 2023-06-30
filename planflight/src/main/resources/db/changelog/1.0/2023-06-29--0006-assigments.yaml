@@ -1,0 +1,57 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2023-06-29--0006-assigments
+      author: yuriy
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: assignmentsPK
+                  name: id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: employee_id
+                  type: BIGINT
+              - column:
+                  name: pairing_id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: rank
+                  type: VARCHAR(50)
+            tableName: assignments
+  - changeSet:
+      id: 2023-06-29--0006-assigment_to_employee
+      author: yuriy
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: employee_id
+            baseTableName: assignments
+            constraintName: fk_assignments_p_employee
+            deferrable: false
+            initiallyDeferred: false
+            referencedColumnNames: id
+            referencedTableName: employees
+            validate: true
+  - changeSet:
+      id: 2023-06-29--0006-assigment_to_pairings
+      author: yuriy
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: pairing_id
+            baseTableName: assignments
+            constraintName: fk_assignments_p_pairings
+            deferrable: false
+            initiallyDeferred: false
+            referencedColumnNames: id
+            referencedTableName: pairings
+            validate: true
+
+

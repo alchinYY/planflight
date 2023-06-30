@@ -1,0 +1,23 @@
+version: "3.7"
+services:
+  postgres:
+    container_name: planflight
+    image: postgres:13
+    environment:
+      POSTGRES_DB: "plan_flight"
+      POSTGRES_USER: "test"
+      POSTGRES_PASSWORD: "test"
+    ports:
+      - "5428:5432"
+  planflight:
+    image: java-test/repo:planflight
+    build:
+      context: ./../planflight
+      dockerfile: Dockerfile
+    environment: # Pass environment variables to the service
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres/plan_flight?currentSchema=public
+      - SPRING_DATASOURCE_USERNAME=test
+      - SPRING_DATASOURCE_PASSWORD=test
+    ports:
+      - "8888:8080"
+    restart: always

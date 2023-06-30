@@ -1,0 +1,47 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2023-06-29--0005-pairings
+      author: yuriy
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pairingsPK
+                  name: id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: fleet_id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: start_time
+                  type: timestamp
+              - column:
+                  constraints:
+                    nullable: false
+                  name: end_time
+                  type: timestamp
+              - column:
+                  constraints:
+                  name: type_pairing
+                  type: VARCHAR(40)
+            tableName: pairings
+  - changeSet:
+      id: 2023-06-29--0005-pairings_to_fleet
+      author: yuriy
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: fleet_id
+            baseTableName: pairings
+            constraintName: fk_pairings_p_fleets
+            deferrable: false
+            initiallyDeferred: false
+            referencedColumnNames: id
+            referencedTableName: fleets
+            validate: true

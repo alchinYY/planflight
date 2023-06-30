@@ -1,0 +1,12 @@
+databaseChangeLog:
+  - changeSet:
+      id: 0001-fleets
+      author: yuriy
+      preConditions:
+        - tableExists:
+            tableName: fleets
+      loadUpdateData:
+        - tableName: fleets
+          primaryKey: id
+          relativeToChangelogFile: true
+          file: data/fleets.csv

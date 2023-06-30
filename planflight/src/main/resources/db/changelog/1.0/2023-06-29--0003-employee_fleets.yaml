@@ -1,0 +1,46 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2023-06-29--0003-employee_fleets
+      author: yuriy
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                  name: employee_id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                  name: fleets_id
+                  type: BIGINT
+            tableName: employee_fleets
+  - changeSet:
+      id: 2023-06-29--0003-employee_fleets_relation_to_employee
+      author: yuriy
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: employee_id
+            baseTableName: employee_fleets
+            constraintName: fk_kemployee_fleets_p_employees
+            deferrable: false
+            initiallyDeferred: false
+            referencedColumnNames: id
+            referencedTableName: employees
+            validate: true
+  - changeSet:
+      id: 2023-06-29--0003-employee_fleets_relation_to_fleets
+      author: yuriy
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: fleets_id
+            baseTableName: employee_fleets
+            constraintName: fk_employee_fleets_p_fleets
+            deferrable: false
+            initiallyDeferred: false
+            referencedColumnNames: id
+            referencedTableName: fleets
+            validate: true

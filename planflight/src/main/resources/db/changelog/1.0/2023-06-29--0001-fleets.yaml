@@ -1,0 +1,22 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2023-06-29--0001-fleets
+      author: yuriy
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: fleetsPK
+                  name: id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                    unique: true
+                  name: name
+                  type: VARCHAR(255)
+            tableName: fleets

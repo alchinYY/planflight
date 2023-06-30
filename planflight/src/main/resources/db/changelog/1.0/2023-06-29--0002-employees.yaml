@@ -1,0 +1,21 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2023-06-29--0002-employees
+      author: yuriy
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: employeesPK
+                  name: id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: gender
+                  type: VARCHAR(40)
+            tableName: employees
+
